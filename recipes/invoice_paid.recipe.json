@@ -1,0 +1,887 @@
+{
+  "code": {
+    "as": "804413b3",
+    "block": [
+      {
+        "as": "dd3f62cd",
+        "extended_input_schema": [
+          {
+            "control_type": "switch",
+            "default": false,
+            "disable_formula": true,
+            "extends_schema": true,
+            "hint": "Send a copy of the message to Workato logs.\n\u003ca href=\"https://docs.workato.com/features/logging-service.html\" target=\"_blank\" class=\"ng-scope\"\u003e\n  Learn more\n\u003c/a\u003e\n",
+            "label": "Send to Workato log service",
+            "name": "user_logs_enabled",
+            "optional": true,
+            "type": "string"
+          }
+        ],
+        "input": {
+          "message": "=\"Paid \" + _dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"invoice_id\"]}') + \": \" + (_dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"amount_cents\"]}') / 100.0).to_currency(unit: _dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"currency\"]}'), format: \"%n %u\")",
+          "user_logs_enabled": "false"
+        },
+        "keyword": "action",
+        "name": "log_message",
+        "number": 1,
+        "provider": "logger",
+        "uuid": "960e6fa2-ddeb-4f34-af1d-71d3b64e632c"
+      },
+      {
+        "block": [
+          {
+            "as": "9670d39d",
+            "extended_input_schema": [
+              {
+                "label": "Request",
+                "name": "request",
+                "override": true,
+                "properties": [
+                  {
+                    "control_type": "select",
+                    "default": "GET",
+                    "hint": "Select a HTTP method",
+                    "label": "Method",
+                    "name": "method",
+                    "pick_list": [
+                      [
+                        "GET",
+                        "GET"
+                      ],
+                      [
+                        "POST",
+                        "POST"
+                      ],
+                      [
+                        "PUT",
+                        "PUT"
+                      ],
+                      [
+                        "DELETE",
+                        "DELETE"
+                      ],
+                      [
+                        "HEAD",
+                        "HEAD"
+                      ],
+                      [
+                        "PATCH",
+                        "PATCH"
+                      ]
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "check_secrets": true,
+                    "control_type": "text",
+                    "hint": "Provide an \u003cb\u003eabsolute URL\u003c/b\u003e or \u003cb\u003erelative URL\u003c/b\u003e (if \u003cb\u003eBase URL\u003c/b\u003e is configured in connection).",
+                    "label": "Request URL",
+                    "name": "url",
+                    "placeholder": "https://api.example.com/v1/leads",
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "select",
+                    "default": "application/json",
+                    "extends_schema": true,
+                    "hint": "The API endpoint documentation should define what data it expects",
+                    "label": "Request content type",
+                    "name": "content_type",
+                    "ngIf": "input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'DELETE' || input.request.method === 'PATCH'",
+                    "optional": true,
+                    "pick_list": [
+                      [
+                        "JSON request body",
+                        "json"
+                      ],
+                      [
+                        "Raw JSON request body",
+                        "application/json"
+                      ],
+                      [
+                        "XML",
+                        "application/xml"
+                      ],
+                      [
+                        "Text",
+                        "text/plain"
+                      ],
+                      [
+                        "URL encoded form",
+                        "application/x-www-form-urlencoded"
+                      ],
+                      [
+                        "Binary",
+                        "application/octet-stream"
+                      ],
+                      [
+                        "Multipart form",
+                        "multipart/form-data"
+                      ],
+                      [
+                        "Multipart alternative",
+                        "multipart/alternative"
+                      ],
+                      [
+                        "Multipart digest",
+                        "multipart/digest"
+                      ],
+                      [
+                        "Multipart mixed",
+                        "multipart/mixed"
+                      ],
+                      [
+                        "Multipart related",
+                        "multipart/related"
+                      ]
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "key_value",
+                    "empty_list_text": "Refer to the API documentation and add form data to the body of this HTTP request",
+                    "empty_list_title": "Does this HTTP request require form data?",
+                    "item_label": "Form data",
+                    "label": "Request body",
+                    "name": "form_body",
+                    "ngIf": "input.request.content_type === 'application/x-www-form-urlencoded' \u0026\u0026 (input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'DELETE' || input.request.method === 'PATCH')",
+                    "of": "object",
+                    "optional": true,
+                    "properties": [
+                      {
+                        "control_type": "text",
+                        "label": "Key",
+                        "name": "param",
+                        "type": "string"
+                      },
+                      {
+                        "control_type": "text",
+                        "label": "Value",
+                        "name": "value",
+                        "type": "string"
+                      }
+                    ],
+                    "type": "array"
+                  },
+                  {
+                    "item_label": "Part",
+                    "label": "Request parts",
+                    "list_mode": "static",
+                    "name": "parts",
+                    "ngIf": "(input.request.content_type === 'multipart/alternative'|| input.request.content_type === 'multipart/digest'|| input.request.content_type === 'multipart/mixed'|| input.request.content_type === 'multipart/related') \u0026\u0026 (input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'DELETE' || input.request.method === 'PATCH')",
+                    "of": "object",
+                    "optional": true,
+                    "properties": [
+                      {
+                        "label": "Headers",
+                        "list_mode": "static",
+                        "name": "headers",
+                        "of": "object",
+                        "optional": true,
+                        "properties": [
+                          {
+                            "control_type": "text",
+                            "label": "Header name",
+                            "name": "name",
+                            "optional": false,
+                            "type": "string"
+                          },
+                          {
+                            "control_type": "text",
+                            "label": "Value",
+                            "name": "value",
+                            "optional": true,
+                            "sticky": true,
+                            "type": "string"
+                          }
+                        ],
+                        "sticky": true,
+                        "type": "array"
+                      },
+                      {
+                        "control_type": "text",
+                        "hint": "Raw content of the part",
+                        "label": "Raw body",
+                        "name": "body",
+                        "optional": true,
+                        "sticky": true,
+                        "type": "string"
+                      }
+                    ],
+                    "type": "array"
+                  },
+                  {
+                    "check_secrets": true,
+                    "control_type": "key_value",
+                    "empty_list_text": "Add URL parameters to the query string",
+                    "empty_list_title": "Does this HTTP request contain a query string?",
+                    "item_label": "URL parameter",
+                    "label": "Request URL parameters",
+                    "name": "parameters",
+                    "ngIf": "!(input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'PATCH')",
+                    "of": "object",
+                    "optional": true,
+                    "properties": [
+                      {
+                        "control_type": "text",
+                        "label": "Parameter name",
+                        "name": "param",
+                        "type": "string"
+                      },
+                      {
+                        "control_type": "text",
+                        "label": "Value",
+                        "name": "value",
+                        "type": "string"
+                      }
+                    ],
+                    "type": "array"
+                  },
+                  {
+                    "check_secrets": true,
+                    "control_type": "key_value",
+                    "empty_list_text": "Refer to the API documentation and add required headers to this HTTP request",
+                    "empty_list_title": "Does this HTTP request require headers?",
+                    "item_label": "Header",
+                    "label": "Request headers",
+                    "name": "headers",
+                    "of": "object",
+                    "optional": true,
+                    "properties": [
+                      {
+                        "control_type": "text",
+                        "label": "Header name",
+                        "name": "header",
+                        "type": "string"
+                      },
+                      {
+                        "control_type": "text",
+                        "label": "Value",
+                        "name": "value",
+                        "type": "string"
+                      }
+                    ],
+                    "sticky": true,
+                    "type": "array"
+                  },
+                  {
+                    "add_field_label": "Add json field",
+                    "change_on_blur": true,
+                    "control_type": "schema-designer",
+                    "empty_schema_title": "Provide JSON input.",
+                    "extends_schema": true,
+                    "hint": "Use this to define the JSON input.",
+                    "label": "Request body schema",
+                    "name": "request_body_schema",
+                    "ngIf": "(input.request.content_type == 'json' || input.request.content_type == 'multipart/form-data' || input.request.content_type === 'json') \u0026\u0026 (input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'DELETE' || input.request.method === 'PATCH')",
+                    "optional": true,
+                    "sample_data_type": "json_input",
+                    "schema_field_name_regex": [
+                      "\\S",
+                      "Field name should not be empty"
+                    ],
+                    "sticky": true,
+                    "type": "string"
+                  },
+                  {
+                    "label": "Request body",
+                    "name": "body",
+                    "properties": [
+                      {
+                        "control_type": "text",
+                        "details": {
+                          "real_name": "invoice_id"
+                        },
+                        "label": "Invoice ID",
+                        "name": "invoice_id",
+                        "optional": false,
+                        "sticky": false,
+                        "type": "string"
+                      },
+                      {
+                        "control_type": "text",
+                        "details": {
+                          "real_name": "customer_email"
+                        },
+                        "label": "Customer email",
+                        "name": "customer_email",
+                        "optional": false,
+                        "sticky": false,
+                        "type": "string"
+                      },
+                      {
+                        "control_type": "number",
+                        "details": {
+                          "real_name": "amount"
+                        },
+                        "label": "Amount",
+                        "name": "amount",
+                        "optional": false,
+                        "parse_output": "float_conversion",
+                        "render_input": "float_conversion",
+                        "sticky": false,
+                        "type": "number"
+                      },
+                      {
+                        "control_type": "text",
+                        "details": {
+                          "real_name": "currency"
+                        },
+                        "label": "Currency",
+                        "name": "currency",
+                        "optional": false,
+                        "sticky": false,
+                        "type": "string"
+                      },
+                      {
+                        "control_type": "date_time",
+                        "details": {
+                          "real_name": "paid_at"
+                        },
+                        "label": "Paid at",
+                        "name": "paid_at",
+                        "optional": false,
+                        "parse_output": "date_time_conversion",
+                        "render_input": "date_time_conversion",
+                        "sticky": false,
+                        "type": "date_time"
+                      },
+                      {
+                        "control_type": "text",
+                        "details": {
+                          "real_name": "source"
+                        },
+                        "label": "Source",
+                        "name": "source",
+                        "optional": false,
+                        "sticky": false,
+                        "type": "string"
+                      }
+                    ],
+                    "sticky": false,
+                    "type": "object"
+                  }
+                ],
+                "type": "object"
+              },
+              {
+                "label": "Response",
+                "name": "response",
+                "override": true,
+                "properties": [
+                  {
+                    "control_type": "select",
+                    "default": "json",
+                    "extends_schema": true,
+                    "hint": "Select expected format of data response type, e.g. JSON or XML. \u003ca href=\"https://docs.workato.com/developing-connectors/http.html#response-type\" target=\"_blank\"\u003eLearn more\u003c/a\u003e",
+                    "label": "Response content type",
+                    "name": "output_type",
+                    "pick_list": [
+                      [
+                        "Text",
+                        "rawdatatxt"
+                      ],
+                      [
+                        "Binary",
+                        "rawdata"
+                      ],
+                      [
+                        "JSON",
+                        "json"
+                      ],
+                      [
+                        "XML",
+                        "xml2"
+                      ],
+                      [
+                        "Multipart",
+                        "multipart"
+                      ]
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "select",
+                    "default": "UTF-8",
+                    "hint": "Default encoding type is set to UTF-8, and typically doesn't need to be changed. \u003ca href=\"https://docs.workato.com/developing-connectors/http.html#response-type\" target=\"_blank\"\u003eLearn more\u003c/a\u003e",
+                    "label": "Encoding",
+                    "name": "expected_encoding",
+                    "optional": true,
+                    "pick_list": "supported_encodings_without_binary_global_pick_list",
+                    "pick_list_connection_less": true,
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "schema-designer",
+                    "empty_schema_title": "Describe all fields in your response.",
+                    "extends_schema": true,
+                    "label": "Response schema",
+                    "name": "response_schema",
+                    "optional": true,
+                    "sample_data_type": "json_http",
+                    "sticky": true,
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "schema-designer",
+                    "empty_schema_title": "Describe all the response headers",
+                    "extends_schema": true,
+                    "label": "HTTP response headers",
+                    "name": "headers_schema",
+                    "optional": true,
+                    "sticky": true,
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "schema-designer",
+                    "empty_schema_title": "Describe headers within each multipart part",
+                    "extends_schema": true,
+                    "hint": "Define the headers that appear in each part of the multipart response (e.g., Content-Type, Content-ID)",
+                    "label": "Multipart part headers",
+                    "name": "part_headers_schema",
+                    "ngIf": "input.response.output_type == 'multipart'",
+                    "optional": true,
+                    "sticky": true,
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "checkbox",
+                    "default": "false",
+                    "hint": "If \u003cb\u003eyes\u003c/b\u003e, non 2xx response codes returned will be marked as a successful action. If \u003cb\u003eno\u003c/b\u003e, non 2xx response codes returned will be marked as an error.",
+                    "label": "Mark non-2xx response codes as success?",
+                    "name": "ignore_http_errors",
+                    "optional": true,
+                    "toggle_field": {
+                      "control_type": "text",
+                      "default": false,
+                      "hint": "If \u003cb\u003eyes\u003c/b\u003e, non 2xx response codes returned will be marked as a successful action. If \u003cb\u003eno\u003c/b\u003e, non 2xx response codes returned will be marked as an error.",
+                      "label": "Mark non-2xx response codes as success?",
+                      "name": "ignore_http_errors",
+                      "optional": true,
+                      "parse_output": null,
+                      "render_input": null,
+                      "toggle_hint": "Use custom value",
+                      "type": "boolean"
+                    },
+                    "toggle_hint": "Select from option list",
+                    "type": "boolean"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "extended_output_schema": [
+              {
+                "label": "Headers",
+                "name": "headers",
+                "properties": [],
+                "type": "object"
+              },
+              {
+                "label": "Response",
+                "name": "response",
+                "properties": [
+                  {
+                    "label": "Json",
+                    "name": "json",
+                    "optional": false,
+                    "properties": [
+                      {
+                        "control_type": "text",
+                        "label": "Invoice ID",
+                        "name": "invoice_id",
+                        "optional": false,
+                        "type": "string"
+                      },
+                      {
+                        "control_type": "number",
+                        "label": "Amount",
+                        "name": "amount",
+                        "optional": false,
+                        "parse_output": "float_conversion",
+                        "type": "number"
+                      }
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "input": {
+              "completion_threshold_seconds": "3600",
+              "disable_retries": "false",
+              "enable_streaming": "false",
+              "request": {
+                "body": {
+                  "amount": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"amount_cents\"]}') / 100.0",
+                  "currency": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"currency\"]}')}",
+                  "customer_email": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"customer_email\"]}')}",
+                  "invoice_id": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"invoice_id\"]}')}",
+                  "paid_at": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"paid_at\"]}')}",
+                  "source": "workato-practice"
+                },
+                "content_type": "json",
+                "method": "POST",
+                "request_body_schema": "[{\"control_type\":\"text\",\"label\":\"Invoice ID\",\"optional\":false,\"type\":\"string\",\"name\":\"invoice_id\",\"details\":{\"real_name\":\"invoice_id\"}},{\"control_type\":\"text\",\"label\":\"Customer email\",\"optional\":false,\"type\":\"string\",\"name\":\"customer_email\",\"details\":{\"real_name\":\"customer_email\"}},{\"control_type\":\"number\",\"label\":\"Amount\",\"parse_output\":\"float_conversion\",\"optional\":false,\"type\":\"number\",\"name\":\"amount\",\"details\":{\"real_name\":\"amount\"}},{\"control_type\":\"text\",\"label\":\"Currency\",\"optional\":false,\"type\":\"string\",\"name\":\"currency\",\"details\":{\"real_name\":\"currency\"}},{\"control_type\":\"date_time\",\"label\":\"Paid at\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"optional\":false,\"type\":\"date_time\",\"name\":\"paid_at\",\"details\":{\"real_name\":\"paid_at\"}},{\"control_type\":\"text\",\"label\":\"Source\",\"optional\":false,\"type\":\"string\",\"name\":\"source\",\"details\":{\"real_name\":\"source\"}}]",
+                "url": "/post"
+              },
+              "request_name": "Send request",
+              "response": {
+                "expected_encoding": "UTF-8",
+                "ignore_http_errors": "false",
+                "output_type": "json",
+                "response_schema": "[{\"properties\":[{\"control_type\":\"text\",\"label\":\"Invoice ID\",\"optional\":false,\"type\":\"string\",\"name\":\"invoice_id\"},{\"control_type\":\"number\",\"label\":\"Amount\",\"parse_output\":\"float_conversion\",\"optional\":false,\"type\":\"number\",\"name\":\"amount\"}],\"label\":\"Json\",\"optional\":false,\"type\":\"object\",\"name\":\"json\"}]"
+              },
+              "wait_for_response": "false"
+            },
+            "keyword": "action",
+            "name": "make_request_v2",
+            "number": 3,
+            "provider": "rest",
+            "toggleCfg": {
+              "disable_retries": true,
+              "response.ignore_http_errors": true
+            },
+            "uuid": "127bb738-ba17-4b89-a7ac-234b44d06f62",
+            "wizardFinished": true
+          },
+          {
+            "as": "b72bf427",
+            "block": [
+              {
+                "as": "b2539927",
+                "extended_input_schema": [
+                  {
+                    "control_type": "switch",
+                    "default": false,
+                    "disable_formula": true,
+                    "extends_schema": true,
+                    "hint": "Send a copy of the message to Workato logs.\n\u003ca href=\"https://docs.workato.com/features/logging-service.html\" target=\"_blank\" class=\"ng-scope\"\u003e\n  Learn more\n\u003c/a\u003e\n",
+                    "label": "Send to Workato log service",
+                    "name": "user_logs_enabled",
+                    "optional": true,
+                    "type": "string"
+                  }
+                ],
+                "input": {
+                  "message": "=\"HTTP failed after \" + _dp('{\"pill_type\":\"output\",\"provider\":\"catch\",\"line\":\"b72bf427\",\"path\":[\"retry_count\"]}').to_s + \" retries: \" + _dp('{\"pill_type\":\"output\",\"provider\":\"catch\",\"line\":\"b72bf427\",\"path\":[\"type\"]}') + \" - \" + _dp('{\"pill_type\":\"output\",\"provider\":\"catch\",\"line\":\"b72bf427\",\"path\":[\"message\"]}')",
+                  "user_logs_enabled": "false"
+                },
+                "keyword": "action",
+                "name": "log_message",
+                "number": 5,
+                "provider": "logger",
+                "uuid": "534e7d0f-65b0-4680-8872-e3598abf8803"
+              },
+              {
+                "as": "c31c5629",
+                "input": {
+                  "stop_reason": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"catch\",\"line\":\"b72bf427\",\"path\":[\"message\"]}')}",
+                  "stop_with_error": "true"
+                },
+                "keyword": "stop",
+                "number": 6,
+                "uuid": "a511729a-b265-4d4a-8947-d31a6bb94495"
+              }
+            ],
+            "input": {
+              "max_retry_count": "3",
+              "retry_interval": "5"
+            },
+            "keyword": "catch",
+            "number": 4,
+            "uuid": "9b735a8b-44af-4b63-ae99-8fdafe8746b1"
+          }
+        ],
+        "input": {},
+        "keyword": "try",
+        "number": 2,
+        "uuid": "86caad52-3e64-45ac-90a8-04f5c733a8f6"
+      },
+      {
+        "as": "600871d8",
+        "extended_input_schema": [
+          {
+            "control_type": "switch",
+            "default": false,
+            "disable_formula": true,
+            "extends_schema": true,
+            "hint": "Send a copy of the message to Workato logs.\n\u003ca href=\"https://docs.workato.com/features/logging-service.html\" target=\"_blank\" class=\"ng-scope\"\u003e\n  Learn more\n\u003c/a\u003e\n",
+            "label": "Send to Workato log service",
+            "name": "user_logs_enabled",
+            "optional": true,
+            "type": "string"
+          }
+        ],
+        "input": {
+          "message": "=\"Posted \" + _dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"invoice_id\"]}') + \" to finance API: HTTP \" + _dp('{\"pill_type\":\"output\",\"provider\":\"rest\",\"line\":\"9670d39d\",\"path\":[\"status_code\"]}').to_s + \", echoed amount \" + _dp('{\"pill_type\":\"output\",\"provider\":\"rest\",\"line\":\"9670d39d\",\"path\":[\"response\",\"json\",\"amount\"]}').to_s",
+          "user_logs_enabled": "false"
+        },
+        "keyword": "action",
+        "name": "log_message",
+        "number": 7,
+        "provider": "logger",
+        "uuid": "b898c618-b35a-47a5-ad67-7261f2507808"
+      }
+    ],
+    "extended_input_schema": [
+      {
+        "label": "Payload configuration",
+        "name": "request",
+        "override": true,
+        "properties": [
+          {
+            "control_type": "select",
+            "default": "json",
+            "extends_schema": true,
+            "hint": "Select the HTTP method and payload data type used by webhook. \u003ca href=\"https://docs.workato.com/developing-connectors/http.html#set-up-your-non-oauth-2-0-connection\" target=\"_blank\"\u003eLearn more\u003c/a\u003e",
+            "label": "Webhook type",
+            "name": "webhook_type",
+            "pick_list": [
+              [
+                "GET request",
+                "get"
+              ],
+              [
+                "PUT/POST with JSON payload",
+                "json"
+              ],
+              [
+                "PUT/POST with XML payload",
+                "xml"
+              ],
+              [
+                "PUT/POST with FORM encoded payload",
+                "form"
+              ],
+              [
+                "PUT/POST with raw binary data",
+                "rawdata"
+              ],
+              [
+                "PUT/POST with unicode text data",
+                "rawdatatxt"
+              ]
+            ],
+            "type": "string"
+          },
+          {
+            "control_type": "schema-designer",
+            "empty_schema_title": "Describe all fields in your response.",
+            "extends_schema": true,
+            "label": "Payload schema",
+            "name": "payload_schema",
+            "optional": true,
+            "sample_data_type": "json_http",
+            "sticky": true,
+            "type": "string"
+          },
+          {
+            "control_type": "schema-designer",
+            "empty_schema_title": "Describe all the query params",
+            "extends_schema": true,
+            "label": "Query params",
+            "name": "query_params",
+            "optional": true,
+            "sticky": true,
+            "type": "string"
+          },
+          {
+            "control_type": "schema-designer",
+            "empty_schema_title": "Describe all the webhook headers",
+            "extends_schema": true,
+            "label": "Headers",
+            "name": "headers_schema",
+            "optional": true,
+            "schema_field_name_regex": [
+              "^[a-zA-Z][\\w-]*$",
+              "HTTP header names only allow alphanumerical symbols, hyphen (-) and underscore (_)"
+            ],
+            "sticky": true,
+            "type": "string"
+          }
+        ],
+        "type": "object"
+      }
+    ],
+    "extended_output_schema": [
+      {
+        "label": "Headers",
+        "name": "headers",
+        "properties": [
+          {
+            "control_type": "text",
+            "label": "Accept",
+            "name": "accept",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "Content length",
+            "name": "content_length",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "Content type",
+            "name": "content_type",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "User agent",
+            "name": "user_agent",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "X amzn trace ID",
+            "name": "x_amzn_trace_id",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "X correlation ID",
+            "name": "x_correlation_id",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "X forwarded for",
+            "name": "x_forwarded_for",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "X forwarded port",
+            "name": "x_forwarded_port",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "X forwarded proto",
+            "name": "x_forwarded_proto",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "X request ID",
+            "name": "x_request_id",
+            "type": "string"
+          }
+        ],
+        "type": "object"
+      },
+      {
+        "label": "Payload",
+        "name": "payload",
+        "properties": [
+          {
+            "control_type": "text",
+            "label": "Event ID",
+            "name": "event_id",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "Event type",
+            "name": "event_type",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "Invoice ID",
+            "name": "invoice_id",
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "Customer email",
+            "name": "customer_email",
+            "type": "string"
+          },
+          {
+            "control_type": "number",
+            "label": "Amount cents",
+            "name": "amount_cents",
+            "parse_output": "float_conversion",
+            "type": "number"
+          },
+          {
+            "control_type": "text",
+            "label": "Currency",
+            "name": "currency",
+            "type": "string"
+          },
+          {
+            "control_type": "date_time",
+            "label": "Paid at",
+            "name": "paid_at",
+            "parse_output": "date_time_conversion",
+            "render_input": "date_time_conversion",
+            "type": "date_time"
+          }
+        ],
+        "type": "object"
+      }
+    ],
+    "filter": {
+      "conditions": [
+        {
+          "lhs": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_webhooks\",\"line\":\"804413b3\",\"path\":[\"payload\",\"event_type\"]}')",
+          "operand": "equals_to",
+          "rhs": "invoice.paid",
+          "uuid": "b2dbfaca-1ee2-4a5f-8181-261cea60fdbd"
+        }
+      ],
+      "operand": "and",
+      "type": "compound"
+    },
+    "input": {
+      "request": {
+        "headers_schema": "[{\"control_type\":\"text\",\"label\":\"Accept\",\"type\":\"string\",\"name\":\"accept\"},{\"control_type\":\"text\",\"label\":\"Content length\",\"type\":\"string\",\"name\":\"content_length\"},{\"control_type\":\"text\",\"label\":\"Content type\",\"type\":\"string\",\"name\":\"content_type\"},{\"control_type\":\"text\",\"label\":\"User agent\",\"type\":\"string\",\"name\":\"user_agent\"},{\"control_type\":\"text\",\"label\":\"X amzn trace ID\",\"type\":\"string\",\"name\":\"x_amzn_trace_id\"},{\"control_type\":\"text\",\"label\":\"X correlation ID\",\"type\":\"string\",\"name\":\"x_correlation_id\"},{\"control_type\":\"text\",\"label\":\"X forwarded for\",\"type\":\"string\",\"name\":\"x_forwarded_for\"},{\"control_type\":\"text\",\"label\":\"X forwarded port\",\"type\":\"string\",\"name\":\"x_forwarded_port\"},{\"control_type\":\"text\",\"label\":\"X forwarded proto\",\"type\":\"string\",\"name\":\"x_forwarded_proto\"},{\"control_type\":\"text\",\"label\":\"X request ID\",\"type\":\"string\",\"name\":\"x_request_id\"}]",
+        "payload_schema": "[{\"control_type\":\"text\",\"label\":\"Event ID\",\"type\":\"string\",\"name\":\"event_id\"},{\"control_type\":\"text\",\"label\":\"Event type\",\"type\":\"string\",\"name\":\"event_type\"},{\"control_type\":\"text\",\"label\":\"Invoice ID\",\"type\":\"string\",\"name\":\"invoice_id\"},{\"control_type\":\"text\",\"label\":\"Customer email\",\"type\":\"string\",\"name\":\"customer_email\"},{\"control_type\":\"number\",\"label\":\"Amount cents\",\"parse_output\":\"float_conversion\",\"type\":\"number\",\"name\":\"amount_cents\"},{\"control_type\":\"text\",\"label\":\"Currency\",\"type\":\"string\",\"name\":\"currency\"},{\"control_type\":\"date_time\",\"label\":\"Paid at\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"paid_at\"}]",
+        "query_params": "[]",
+        "webhook_type": "json"
+      },
+      "webhook_suffix": "invoice_paid"
+    },
+    "keyword": "trigger",
+    "name": "new_event",
+    "number": 0,
+    "provider": "workato_webhooks",
+    "unfinished": false,
+    "uuid": "fbe4fd07-694b-4c87-a2e7-ad527934fbec",
+    "wizardFinished": true
+  },
+  "concurrency": 1,
+  "config": [
+    {
+      "account_id": null,
+      "keyword": "application",
+      "provider": "workato_webhooks",
+      "skip_validation": false
+    },
+    {
+      "account_id": null,
+      "keyword": "application",
+      "provider": "logger",
+      "skip_validation": false
+    },
+    {
+      "account_id": {
+        "folder": "",
+        "name": "httpbin (no auth)",
+        "zip_name": "httpbin_no_auth.connection.json"
+      },
+      "keyword": "application",
+      "provider": "rest",
+      "skip_validation": false
+    }
+  ],
+  "description": "",
+  "name": "Invoice paid",
+  "private": false,
+  "version": 13
+}

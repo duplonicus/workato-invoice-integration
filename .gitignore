@@ -1,0 +1,6 @@
+# wk file-store credentials (API token) and per-workspace config (email, workspace id)
+profiles.env
+.wk/
+workspace/
+scripts/.skill_id
+scripts/.recipe_id

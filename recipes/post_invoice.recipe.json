@@ -1,0 +1,647 @@
+{
+  "code": {
+    "as": "517f32a1",
+    "block": [
+      {
+        "as": "5032b49e",
+        "extended_input_schema": [
+          {
+            "label": "Request",
+            "name": "request",
+            "override": true,
+            "properties": [
+              {
+                "control_type": "select",
+                "default": "GET",
+                "hint": "Select a HTTP method",
+                "label": "Method",
+                "name": "method",
+                "pick_list": [
+                  [
+                    "GET",
+                    "GET"
+                  ],
+                  [
+                    "POST",
+                    "POST"
+                  ],
+                  [
+                    "PUT",
+                    "PUT"
+                  ],
+                  [
+                    "DELETE",
+                    "DELETE"
+                  ],
+                  [
+                    "HEAD",
+                    "HEAD"
+                  ],
+                  [
+                    "PATCH",
+                    "PATCH"
+                  ]
+                ],
+                "type": "string"
+              },
+              {
+                "check_secrets": true,
+                "control_type": "text",
+                "hint": "Provide an \u003cb\u003eabsolute URL\u003c/b\u003e or \u003cb\u003erelative URL\u003c/b\u003e (if \u003cb\u003eBase URL\u003c/b\u003e is configured in connection).",
+                "label": "Request URL",
+                "name": "url",
+                "placeholder": "https://api.example.com/v1/leads",
+                "type": "string"
+              },
+              {
+                "control_type": "select",
+                "default": "application/json",
+                "extends_schema": true,
+                "hint": "The API endpoint documentation should define what data it expects",
+                "label": "Request content type",
+                "name": "content_type",
+                "ngIf": "input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'DELETE' || input.request.method === 'PATCH'",
+                "optional": true,
+                "pick_list": [
+                  [
+                    "JSON request body",
+                    "json"
+                  ],
+                  [
+                    "Raw JSON request body",
+                    "application/json"
+                  ],
+                  [
+                    "XML",
+                    "application/xml"
+                  ],
+                  [
+                    "Text",
+                    "text/plain"
+                  ],
+                  [
+                    "URL encoded form",
+                    "application/x-www-form-urlencoded"
+                  ],
+                  [
+                    "Binary",
+                    "application/octet-stream"
+                  ],
+                  [
+                    "Multipart form",
+                    "multipart/form-data"
+                  ],
+                  [
+                    "Multipart alternative",
+                    "multipart/alternative"
+                  ],
+                  [
+                    "Multipart digest",
+                    "multipart/digest"
+                  ],
+                  [
+                    "Multipart mixed",
+                    "multipart/mixed"
+                  ],
+                  [
+                    "Multipart related",
+                    "multipart/related"
+                  ]
+                ],
+                "type": "string"
+              },
+              {
+                "control_type": "key_value",
+                "empty_list_text": "Refer to the API documentation and add form data to the body of this HTTP request",
+                "empty_list_title": "Does this HTTP request require form data?",
+                "item_label": "Form data",
+                "label": "Request body",
+                "name": "form_body",
+                "ngIf": "input.request.content_type === 'application/x-www-form-urlencoded' \u0026\u0026 (input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'DELETE' || input.request.method === 'PATCH')",
+                "of": "object",
+                "optional": true,
+                "properties": [
+                  {
+                    "control_type": "text",
+                    "label": "Key",
+                    "name": "param",
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "text",
+                    "label": "Value",
+                    "name": "value",
+                    "type": "string"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "item_label": "Part",
+                "label": "Request parts",
+                "list_mode": "static",
+                "name": "parts",
+                "ngIf": "(input.request.content_type === 'multipart/alternative'|| input.request.content_type === 'multipart/digest'|| input.request.content_type === 'multipart/mixed'|| input.request.content_type === 'multipart/related') \u0026\u0026 (input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'DELETE' || input.request.method === 'PATCH')",
+                "of": "object",
+                "optional": true,
+                "properties": [
+                  {
+                    "label": "Headers",
+                    "list_mode": "static",
+                    "name": "headers",
+                    "of": "object",
+                    "optional": true,
+                    "properties": [
+                      {
+                        "control_type": "text",
+                        "label": "Header name",
+                        "name": "name",
+                        "optional": false,
+                        "type": "string"
+                      },
+                      {
+                        "control_type": "text",
+                        "label": "Value",
+                        "name": "value",
+                        "optional": true,
+                        "sticky": true,
+                        "type": "string"
+                      }
+                    ],
+                    "sticky": true,
+                    "type": "array"
+                  },
+                  {
+                    "control_type": "text",
+                    "hint": "Raw content of the part",
+                    "label": "Raw body",
+                    "name": "body",
+                    "optional": true,
+                    "sticky": true,
+                    "type": "string"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "check_secrets": true,
+                "control_type": "key_value",
+                "empty_list_text": "Add URL parameters to the query string",
+                "empty_list_title": "Does this HTTP request contain a query string?",
+                "item_label": "URL parameter",
+                "label": "Request URL parameters",
+                "name": "parameters",
+                "ngIf": "!(input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'PATCH')",
+                "of": "object",
+                "optional": true,
+                "properties": [
+                  {
+                    "control_type": "text",
+                    "label": "Parameter name",
+                    "name": "param",
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "text",
+                    "label": "Value",
+                    "name": "value",
+                    "type": "string"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "check_secrets": true,
+                "control_type": "key_value",
+                "empty_list_text": "Refer to the API documentation and add required headers to this HTTP request",
+                "empty_list_title": "Does this HTTP request require headers?",
+                "item_label": "Header",
+                "label": "Request headers",
+                "name": "headers",
+                "of": "object",
+                "optional": true,
+                "properties": [
+                  {
+                    "control_type": "text",
+                    "label": "Header name",
+                    "name": "header",
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "text",
+                    "label": "Value",
+                    "name": "value",
+                    "type": "string"
+                  }
+                ],
+                "sticky": true,
+                "type": "array"
+              },
+              {
+                "add_field_label": "Add json field",
+                "change_on_blur": true,
+                "control_type": "schema-designer",
+                "empty_schema_title": "Provide JSON input.",
+                "extends_schema": true,
+                "hint": "Use this to define the JSON input.",
+                "label": "Request body schema",
+                "name": "request_body_schema",
+                "ngIf": "(input.request.content_type == 'json' || input.request.content_type == 'multipart/form-data' || input.request.content_type === 'json') \u0026\u0026 (input.request.method === 'POST' || input.request.method === 'PUT' || input.request.method === 'DELETE' || input.request.method === 'PATCH')",
+                "optional": true,
+                "sample_data_type": "json_input",
+                "schema_field_name_regex": [
+                  "\\S",
+                  "Field name should not be empty"
+                ],
+                "sticky": true,
+                "type": "string"
+              },
+              {
+                "label": "Request body",
+                "name": "body",
+                "properties": [
+                  {
+                    "control_type": "text",
+                    "details": {
+                      "real_name": "invoice_id"
+                    },
+                    "label": "Invoice ID",
+                    "name": "invoice_id",
+                    "optional": false,
+                    "sticky": false,
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "text",
+                    "details": {
+                      "real_name": "customer_email"
+                    },
+                    "label": "Customer email",
+                    "name": "customer_email",
+                    "optional": false,
+                    "sticky": false,
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "number",
+                    "details": {
+                      "real_name": "amount"
+                    },
+                    "label": "Amount",
+                    "name": "amount",
+                    "optional": false,
+                    "parse_output": "float_conversion",
+                    "render_input": "float_conversion",
+                    "sticky": false,
+                    "type": "number"
+                  },
+                  {
+                    "control_type": "text",
+                    "details": {
+                      "real_name": "currency"
+                    },
+                    "label": "Currency",
+                    "name": "currency",
+                    "optional": false,
+                    "sticky": false,
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "text",
+                    "details": {
+                      "real_name": "source"
+                    },
+                    "label": "Source",
+                    "name": "source",
+                    "optional": false,
+                    "sticky": false,
+                    "type": "string"
+                  }
+                ],
+                "sticky": false,
+                "type": "object"
+              }
+            ],
+            "type": "object"
+          },
+          {
+            "label": "Response",
+            "name": "response",
+            "override": true,
+            "properties": [
+              {
+                "control_type": "select",
+                "default": "json",
+                "extends_schema": true,
+                "hint": "Select expected format of data response type, e.g. JSON or XML. \u003ca href=\"https://docs.workato.com/developing-connectors/http.html#response-type\" target=\"_blank\"\u003eLearn more\u003c/a\u003e",
+                "label": "Response content type",
+                "name": "output_type",
+                "pick_list": [
+                  [
+                    "Text",
+                    "rawdatatxt"
+                  ],
+                  [
+                    "Binary",
+                    "rawdata"
+                  ],
+                  [
+                    "JSON",
+                    "json"
+                  ],
+                  [
+                    "XML",
+                    "xml2"
+                  ],
+                  [
+                    "Multipart",
+                    "multipart"
+                  ]
+                ],
+                "type": "string"
+              },
+              {
+                "control_type": "select",
+                "default": "UTF-8",
+                "hint": "Default encoding type is set to UTF-8, and typically doesn't need to be changed. \u003ca href=\"https://docs.workato.com/developing-connectors/http.html#response-type\" target=\"_blank\"\u003eLearn more\u003c/a\u003e",
+                "label": "Encoding",
+                "name": "expected_encoding",
+                "optional": true,
+                "pick_list": "supported_encodings_without_binary_global_pick_list",
+                "pick_list_connection_less": true,
+                "type": "string"
+              },
+              {
+                "control_type": "schema-designer",
+                "empty_schema_title": "Describe all fields in your response.",
+                "extends_schema": true,
+                "label": "Response schema",
+                "name": "response_schema",
+                "optional": true,
+                "sample_data_type": "json_http",
+                "sticky": true,
+                "type": "string"
+              },
+              {
+                "control_type": "schema-designer",
+                "empty_schema_title": "Describe all the response headers",
+                "extends_schema": true,
+                "label": "HTTP response headers",
+                "name": "headers_schema",
+                "optional": true,
+                "sticky": true,
+                "type": "string"
+              },
+              {
+                "control_type": "schema-designer",
+                "empty_schema_title": "Describe headers within each multipart part",
+                "extends_schema": true,
+                "hint": "Define the headers that appear in each part of the multipart response (e.g., Content-Type, Content-ID)",
+                "label": "Multipart part headers",
+                "name": "part_headers_schema",
+                "ngIf": "input.response.output_type == 'multipart'",
+                "optional": true,
+                "sticky": true,
+                "type": "string"
+              },
+              {
+                "control_type": "checkbox",
+                "default": "false",
+                "hint": "If \u003cb\u003eyes\u003c/b\u003e, non 2xx response codes returned will be marked as a successful action. If \u003cb\u003eno\u003c/b\u003e, non 2xx response codes returned will be marked as an error.",
+                "label": "Mark non-2xx response codes as success?",
+                "name": "ignore_http_errors",
+                "optional": true,
+                "toggle_field": {
+                  "control_type": "text",
+                  "default": false,
+                  "hint": "If \u003cb\u003eyes\u003c/b\u003e, non 2xx response codes returned will be marked as a successful action. If \u003cb\u003eno\u003c/b\u003e, non 2xx response codes returned will be marked as an error.",
+                  "label": "Mark non-2xx response codes as success?",
+                  "name": "ignore_http_errors",
+                  "optional": true,
+                  "parse_output": null,
+                  "render_input": null,
+                  "toggle_hint": "Use custom value",
+                  "type": "boolean"
+                },
+                "toggle_hint": "Select from option list",
+                "type": "boolean"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "extended_output_schema": [
+          {
+            "label": "Headers",
+            "name": "headers",
+            "properties": [],
+            "type": "object"
+          },
+          {
+            "label": "Response",
+            "name": "response",
+            "properties": [
+              {
+                "label": "Json",
+                "name": "json",
+                "optional": false,
+                "properties": [
+                  {
+                    "control_type": "text",
+                    "label": "Invoice ID",
+                    "name": "invoice_id",
+                    "optional": false,
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "number",
+                    "label": "Amount",
+                    "name": "amount",
+                    "optional": false,
+                    "parse_output": "float_conversion",
+                    "type": "number"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "input": {
+          "completion_threshold_seconds": "3600",
+          "disable_retries": "false",
+          "enable_streaming": "false",
+          "request": {
+            "body": {
+              "amount": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_skill\",\"line\":\"517f32a1\",\"path\":[\"parameters\",\"amount_cents\"]}') / 100.0",
+              "currency": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"workato_skill\",\"line\":\"517f32a1\",\"path\":[\"parameters\",\"currency\"]}')}",
+              "customer_email": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"workato_skill\",\"line\":\"517f32a1\",\"path\":[\"parameters\",\"customer_email\"]}')}",
+              "invoice_id": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"workato_skill\",\"line\":\"517f32a1\",\"path\":[\"parameters\",\"invoice_id\"]}')}",
+              "source": "workato-mcp"
+            },
+            "content_type": "json",
+            "method": "POST",
+            "request_body_schema": "[{\"control_type\":\"text\",\"label\":\"Invoice ID\",\"optional\":false,\"type\":\"string\",\"name\":\"invoice_id\",\"details\":{\"real_name\":\"invoice_id\"}},{\"control_type\":\"text\",\"label\":\"Customer email\",\"optional\":false,\"type\":\"string\",\"name\":\"customer_email\",\"details\":{\"real_name\":\"customer_email\"}},{\"control_type\":\"number\",\"label\":\"Amount\",\"parse_output\":\"float_conversion\",\"optional\":false,\"type\":\"number\",\"name\":\"amount\",\"details\":{\"real_name\":\"amount\"}},{\"control_type\":\"text\",\"label\":\"Currency\",\"optional\":false,\"type\":\"string\",\"name\":\"currency\",\"details\":{\"real_name\":\"currency\"}},{\"control_type\":\"text\",\"label\":\"Source\",\"optional\":false,\"type\":\"string\",\"name\":\"source\",\"details\":{\"real_name\":\"source\"}}]",
+            "url": "/post"
+          },
+          "request_name": "Send request",
+          "response": {
+            "expected_encoding": "UTF-8",
+            "ignore_http_errors": "false",
+            "output_type": "json",
+            "response_schema": "[{\"properties\":[{\"control_type\":\"text\",\"label\":\"Invoice ID\",\"optional\":false,\"type\":\"string\",\"name\":\"invoice_id\"},{\"control_type\":\"number\",\"label\":\"Amount\",\"parse_output\":\"float_conversion\",\"optional\":false,\"type\":\"number\",\"name\":\"amount\"}],\"label\":\"Json\",\"optional\":false,\"type\":\"object\",\"name\":\"json\"}]"
+          },
+          "wait_for_response": "false"
+        },
+        "keyword": "action",
+        "name": "make_request_v2",
+        "number": 1,
+        "provider": "rest",
+        "toggleCfg": {
+          "disable_retries": true,
+          "response.ignore_http_errors": true
+        },
+        "uuid": "a5d7bf03-a454-4aa8-9cef-fd25029de602",
+        "wizardFinished": true
+      },
+      {
+        "as": "3c082ea2",
+        "extended_input_schema": [
+          {
+            "label": "Response",
+            "name": "result",
+            "properties": [
+              {
+                "control_type": "number",
+                "label": "Status code",
+                "name": "status_code",
+                "optional": false,
+                "parse_output": "float_conversion",
+                "type": "number"
+              },
+              {
+                "control_type": "number",
+                "label": "Echoed amount",
+                "name": "echoed_amount",
+                "optional": false,
+                "parse_output": "float_conversion",
+                "type": "number"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "extended_output_schema": [
+          {
+            "label": "Response",
+            "name": "result",
+            "properties": [
+              {
+                "control_type": "number",
+                "label": "Status code",
+                "name": "status_code",
+                "optional": false,
+                "parse_output": "float_conversion",
+                "type": "number"
+              },
+              {
+                "control_type": "number",
+                "label": "Echoed amount",
+                "name": "echoed_amount",
+                "optional": false,
+                "parse_output": "float_conversion",
+                "type": "number"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "input": {
+          "result": {
+            "echoed_amount": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"rest\",\"line\":\"5032b49e\",\"path\":[\"response\",\"json\",\"amount\"]}')}",
+            "status_code": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"rest\",\"line\":\"5032b49e\",\"path\":[\"status_code\"]}')}"
+          }
+        },
+        "keyword": "action",
+        "name": "workflow_return_result",
+        "number": 2,
+        "provider": "workato_skill",
+        "uuid": "3b73ceca-e443-4f5c-add3-40591ffac1ff"
+      }
+    ],
+    "extended_output_schema": [
+      {
+        "label": "Parameters",
+        "name": "parameters",
+        "properties": [
+          {
+            "control_type": "text",
+            "label": "Invoice ID",
+            "name": "invoice_id",
+            "optional": false,
+            "type": "string"
+          },
+          {
+            "control_type": "number",
+            "label": "Amount cents",
+            "name": "amount_cents",
+            "optional": false,
+            "parse_output": "float_conversion",
+            "type": "number"
+          },
+          {
+            "control_type": "text",
+            "label": "Currency",
+            "name": "currency",
+            "optional": false,
+            "type": "string"
+          },
+          {
+            "control_type": "text",
+            "label": "Customer email",
+            "name": "customer_email",
+            "optional": false,
+            "type": "string"
+          }
+        ],
+        "type": "object"
+      }
+    ],
+    "input": {
+      "description": "Use when asked to post a paid invoice to the finance API. Requires invoice_id, amount_cents (whole cents, e.g. 129900 = 1,299.00) and currency (3-letter code).",
+      "parameters_schema_json": "[{\"control_type\":\"text\",\"label\":\"Invoice ID\",\"optional\":false,\"type\":\"string\",\"name\":\"invoice_id\"},{\"control_type\":\"number\",\"label\":\"Amount cents\",\"parse_output\":\"float_conversion\",\"optional\":false,\"type\":\"number\",\"name\":\"amount_cents\"},{\"control_type\":\"text\",\"label\":\"Currency\",\"optional\":false,\"type\":\"string\",\"name\":\"currency\"},{\"control_type\":\"text\",\"label\":\"Customer email\",\"optional\":false,\"type\":\"string\",\"name\":\"customer_email\"}]",
+      "requires_user_confirmation": "true",
+      "result_schema_json": "[{\"control_type\":\"number\",\"label\":\"Status code\",\"parse_output\":\"float_conversion\",\"optional\":false,\"type\":\"number\",\"name\":\"status_code\"},{\"control_type\":\"number\",\"label\":\"Echoed amount\",\"parse_output\":\"float_conversion\",\"optional\":false,\"type\":\"number\",\"name\":\"echoed_amount\"}]"
+    },
+    "keyword": "trigger",
+    "name": "start_workflow",
+    "number": 0,
+    "provider": "workato_skill",
+    "unfinished": false,
+    "uuid": "e013260a-f5a4-4ee8-9842-00de412673d7"
+  },
+  "concurrency": 1,
+  "config": [
+    {
+      "account_id": null,
+      "keyword": "application",
+      "provider": "workato_skill",
+      "skip_validation": false
+    },
+    {
+      "account_id": {
+        "folder": "",
+        "name": "httpbin (no auth)",
+        "zip_name": "httpbin_no_auth.connection.json"
+      },
+      "keyword": "application",
+      "provider": "rest",
+      "skip_validation": false
+    }
+  ],
+  "description": "",
+  "name": "post_invoice",
+  "private": false,
+  "version": 6
+}

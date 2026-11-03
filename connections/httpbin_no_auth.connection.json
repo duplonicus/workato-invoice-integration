@@ -1,0 +1,5 @@
+{
+  "name": "httpbin (no auth)",
+  "provider": "rest",
+  "root_folder": false
+}

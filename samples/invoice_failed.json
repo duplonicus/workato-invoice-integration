@@ -1,0 +1,9 @@
+{
+  "event_id": "evt_1002",
+  "event_type": "invoice.payment_failed",
+  "invoice_id": "INV-2026-0043",
+  "customer_email": "ap@example.com",
+  "amount_cents": 54000,
+  "currency": "CAD",
+  "paid_at": "2026-11-03T14:10:00Z"
+}
