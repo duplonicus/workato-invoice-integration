@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Keep local recipe JSON and the workspace in sync (run inside the wk project dir).
-#   ./02_sync.sh pull   # web-app edits -> local JSON (what produced ../recipes/*.json)
-#   ./02_sync.sh push   # local JSON edits -> workspace (makes real changes: sandbox only)
-#   ./02_sync.sh diff   # what would change
+#   ../scripts/02_sync.sh pull   # web-app edits -> local JSON (what produced ../recipes/*.json)
+#   ../scripts/02_sync.sh push   # local JSON edits -> workspace (makes real changes: sandbox only)
+#   ../scripts/02_sync.sh diff   # what would change
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 case "${1:-status}" in

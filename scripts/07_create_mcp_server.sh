@@ -15,7 +15,7 @@
 #   ../scripts/07_create_mcp_server.sh <folder-id> "$(cat ../scripts/.recipe_id)"
 # CLI alternative (recipe-backed tools): ../scripts/00_wkt.sh mcp servers create --name ... --folder-id ... --recipe <id>
 #
-# Usage: ./07_create_mcp_server.sh <folder-id> [tool-id] [trigger_application]
+# Usage: ../scripts/07_create_mcp_server.sh <folder-id> [tool-id] [trigger_application]
 #   tool-id defaults to scripts/.skill_id (written by 06_create_skill.sh)
 #   trigger_application defaults to workato_skill; recipe functions use workato_recipe_function
 # Needs: wk, jq, curl.

@@ -7,7 +7,7 @@
 #   wk recipes import <path> --folder <id> | wk recipes start <id> | wk agentic skills create --recipe-id <id>
 # A skill can't be deleted through the API (only in the web app), so run this only where you mean to keep it.
 # Writes scripts/.recipe_id and scripts/.skill_id (both gitignored) for 07_create_mcp_server.sh.
-# Usage: ./06_create_skill.sh <folder-id> [recipe.json]   (find the folder id: ../scripts/00_wkt.sh folders list --projects)
+# Usage: ../scripts/06_create_skill.sh <folder-id> [recipe.json]   (find the folder id: ../scripts/00_wkt.sh folders list --projects)
 # Needs: wk, jq.
 # Run it from the wk project dir (workspace/): wk finds a file-store profile only in the current folder.
 set -euo pipefail
