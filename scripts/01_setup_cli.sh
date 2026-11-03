@@ -7,7 +7,7 @@
 #   2. Create API client with that role, project access = your project. Copy the token (shown once).
 # Install wk: https://github.com/workato-devs/wk (brew install workato-devs/tap/wk, or go install).
 set -euo pipefail
-project="${1:?usage: setup_cli.sh <workato-project-name> [dir]}"
+project="${1:?usage: 01_setup_cli.sh <workato-project-name> [dir]}"
 dir="${2:-workspace}"
 mkdir -p "$dir" && cd "$dir"
 

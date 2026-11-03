@@ -2,7 +2,7 @@
 # Code twin of Stop 8 (Handle errors: Monitor block + On error, 3 retries, 5 s apart).
 # POSTs the invoice body; on a non-2xx it retries up to 3 times, then logs the failure
 # and exits non-zero (like the recipe's On error block + Stop job).
-# Usage: ./post_with_retry.sh [url] [payload.json]
+# Usage: ./05_post_with_retry.sh [url] [payload.json]
 #   url default https://httpbin.org/post ; use https://httpbin.org/status/503 to force failures.
 set -uo pipefail
 url="${1:-https://httpbin.org/post}"

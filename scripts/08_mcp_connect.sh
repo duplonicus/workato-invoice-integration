@@ -5,7 +5,7 @@
 # The token is read hidden and never echoed. Note: Claude Code stores the full URL (with token)
 # in ~/.claude.json, so never commit that file.
 set -euo pipefail
-base="${1:?usage: mcp_connect.sh <remote-mcp-base-url, e.g. https://1234.apim.mcp.trial.workato.com/> [name]}"
+base="${1:?usage: 08_mcp_connect.sh <remote-mcp-base-url, e.g. https://1234.apim.mcp.trial.workato.com/> [name]}"
 name="${2:-finance-practice}"
 read -rsp "Paste MCP token (hidden): " token; echo
 claude mcp add --transport http "$name" "${base%/}/?wkt_token=${token}"

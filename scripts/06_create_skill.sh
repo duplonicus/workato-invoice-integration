@@ -6,13 +6,13 @@
 # Uses the wk CLI via ./wk.sh (needs WK_PROFILE):
 #   wk recipes import <path> --folder <id> | wk recipes start <id> | wk agentic skills create --recipe-id <id>
 # A skill can't be deleted through the API (only in the web app), so run this only where you mean to keep it.
-# Writes scripts/.recipe_id and scripts/.skill_id (both gitignored) for create_mcp_server.sh.
-# Usage: ./create_skill.sh <folder-id> [recipe.json]   (find the folder id: ../scripts/wk.sh folders list --projects)
+# Writes scripts/.recipe_id and scripts/.skill_id (both gitignored) for 07_create_mcp_server.sh.
+# Usage: ./06_create_skill.sh <folder-id> [recipe.json]   (find the folder id: ../scripts/wk.sh folders list --projects)
 # Needs: wk, jq.
 # Run it from the wk project dir (workspace/): wk finds a file-store profile only in the current folder.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
-folder="${1:?usage: create_skill.sh <folder-id> [recipe.json]}"
+folder="${1:?usage: 06_create_skill.sh <folder-id> [recipe.json]}"
 recipe="${2:-$here/../recipes/post_invoice.recipe.json}"
 
 echo "1/3 importing $recipe into folder $folder"

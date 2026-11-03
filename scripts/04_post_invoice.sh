@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Code twin of the recipe's HTTP action (Stop 7): turn the webhook payload into the
 # finance-shaped body and POST it as JSON to https://httpbin.org/post (an echo API).
-# Usage: ./post_invoice.sh [payload.json]   (default: ../samples/invoice_paid.json)
+# Usage: ./04_post_invoice.sh [payload.json]   (default: ../samples/invoice_paid.json)
 # Needs: jq, curl.
 set -euo pipefail
 payload="${1:-$(dirname "$0")/../samples/invoice_paid.json}"
