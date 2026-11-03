@@ -13,7 +13,7 @@
 # workato_api_platform. NOT verified: whether a workato_skill tool's "id" is the skill id (skl-...)
 # or the recipe id. The default below is the skill id; if the API rejects it, pass the recipe id:
 #   ../scripts/07_create_mcp_server.sh <folder-id> "$(cat ../scripts/.recipe_id)"
-# CLI alternative (recipe-backed tools): ../scripts/wkt mcp servers create --name ... --folder-id ... --recipe <id>
+# CLI alternative (recipe-backed tools): ../scripts/00_wkt.sh mcp servers create --name ... --folder-id ... --recipe <id>
 #
 # Usage: ./07_create_mcp_server.sh <folder-id> [tool-id] [trigger_application]
 #   tool-id defaults to scripts/.skill_id (written by 06_create_skill.sh)
@@ -32,7 +32,7 @@ body=$(jq -n --arg n "finance-practice" --argjson f "$folder" --arg app "$app" -
   --arg d "Practice finance tools. post_invoice sends a paid invoice to a test finance API (httpbin echo). Always confirm with the user before calling it." \
   '{name:$n, description:$d, folder_id:$f, tools:[{trigger_application:$app, id:$id}]}')
 
-token=$("$here/wkt" auth token)
+token=$("$here/00_wkt.sh" auth token)
 resp=$(curl -sS --fail-with-body -X POST "$base/api/mcp/mcp_servers" \
   -H "Authorization: Bearer $token" -H 'Content-Type: application/json' -d "$body") || {
   unset token

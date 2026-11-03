@@ -6,9 +6,9 @@
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 case "${1:-status}" in
-  pull) "$here/wkt" pull && "$here/wkt" status ;;
-  push) "$here/wkt" diff && read -rp "Push these changes? [y/N] " a && [[ $a == y ]] && "$here/wkt" push ;;
-  diff) "$here/wkt" diff ;;
-  status) "$here/wkt" status ;;
+  pull) "$here/00_wkt.sh" pull && "$here/00_wkt.sh" status ;;
+  push) "$here/00_wkt.sh" diff && read -rp "Push these changes? [y/N] " a && [[ $a == y ]] && "$here/00_wkt.sh" push ;;
+  diff) "$here/00_wkt.sh" diff ;;
+  status) "$here/00_wkt.sh" status ;;
   *) echo "usage: 02_sync.sh pull|push|diff|status" >&2; exit 2 ;;
 esac

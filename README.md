@@ -35,7 +35,8 @@ Claude Code ──MCP (Streamable HTTP)──> Workato MCP server "finance-pract
 | `recipes/post_invoice.recipe.json` | The MCP skill (Start workflow -> HTTP -> Return response) |
 | `connections/httpbin_no_auth.connection.json` | HTTP connection (no auth, no secrets) |
 | `samples/` | Test payloads |
-| `scripts/01_setup_cli.sh`, `02_sync.sh` (+ helper `wkt`) | `wk` CLI login, project init, pull/push |
+| `scripts/00_wkt.sh` | `wk` wrapper for a file-store profile (alias it as `wkt`: see the top of the file) |
+| `scripts/01_setup_cli.sh`, `02_sync.sh` | `wk` CLI login, project init, pull/push |
 | `scripts/03_send_test_event.sh` | Fire a test webhook (`curl`) |
 | `scripts/04_post_invoice.sh` | The recipe's transform + POST in `jq` + `curl` |
 | `scripts/05_post_with_retry.sh` | The recipe's error handling in bash: 3 retries, 5 s, non-zero exit on failure |
