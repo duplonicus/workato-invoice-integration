@@ -9,6 +9,7 @@
 # Writes scripts/.recipe_id and scripts/.skill_id (both gitignored) for create_mcp_server.sh.
 # Usage: ./create_skill.sh <folder-id> [recipe.json]   (find the folder id: ./wk.sh folders list --projects)
 # Needs: wk, jq.
+# Run it from the wk project dir (workspace/): wk finds a file-store profile only in the current folder.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 folder="${1:?usage: create_skill.sh <folder-id> [recipe.json]}"

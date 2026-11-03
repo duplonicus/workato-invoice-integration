@@ -8,7 +8,8 @@ set -uo pipefail
 url="${1:-https://httpbin.org/post}"
 payload="${2:-$(dirname "$0")/../samples/invoice_paid.json}"
 out=$(mktemp); trap 'rm -f "$out"' EXIT
-body=$(jq -c '{invoice_id, customer_email, amount: (.amount_cents / 100), currency, paid_at, source: "workato-practice"}' "$payload")
+body=$(jq -c '{invoice_id, customer_email, amount: (.amount_cents / 100), currency, paid_at, source: "workato-practice"}' "$payload") \
+  || { echo "bad payload: $payload" >&2; exit 2; }
 max_retries=3; interval=5
 for attempt in $(seq 0 "$max_retries"); do
   code=$(curl -sS -o "$out" -w '%{http_code}' -X POST "$url" -H 'Content-Type: application/json' --data-binary "$body")
